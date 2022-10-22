@@ -19,13 +19,13 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(int id){
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+    public void delete(String name){
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("not found"));
         categoryRepository.delete(category);
     }
 
     @Transactional
-    public Category detail(int id){
-        return categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+    public Category detail(String name){
+        return categoryRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("not found"));
     }
 }

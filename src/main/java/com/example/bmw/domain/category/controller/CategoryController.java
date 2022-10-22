@@ -16,13 +16,13 @@ public class CategoryController {
         return categoryService.save(categoryRequest.getName());
     }
 
-    @DeleteMapping("/template/category/{id}")
-    public void delete(@PathVariable int id){
-        categoryService.delete(id);
+    @DeleteMapping("/template/category")
+    public void delete(@RequestBody CategoryRequest categoryRequest){
+        categoryService.delete(categoryRequest.getName());
     }
 
-    @GetMapping("/template/category/{id}")
-    public Category detail(@PathVariable int id){
-        return categoryService.detail(id);
+    @GetMapping("/template/category")
+    public Category detail(@RequestBody CategoryRequest categoryRequest){
+        return categoryService.detail(categoryRequest.getName());
     }
 }
