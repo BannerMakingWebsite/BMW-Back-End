@@ -39,4 +39,9 @@ public class PostController {
     public List<Post> search(@RequestParam String keyword){
         return postService.search(keyword);
     }
+
+    @GetMapping("/template/popular")
+    public List<Post> popularList(){
+        return postService.popularList();
+    }
 }

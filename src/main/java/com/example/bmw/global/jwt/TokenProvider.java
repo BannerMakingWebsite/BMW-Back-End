@@ -32,7 +32,7 @@ public class TokenProvider {
     private long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7; //일주일
 
     private final CustomUserDetailsService customUserDetailsService;
-    public static final String HEADER_ACCESS_TOKEN = "X-ACCESS-TOKEN";
+    public static final String HEADER_ACCESS_TOKEN = "Authorization";
     public static final String HEADER_REFRESH_TOKEN = "X-REFRESH-TOKEN";
 
     @PostConstruct

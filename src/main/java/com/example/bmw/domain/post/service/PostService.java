@@ -11,6 +11,7 @@ import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,5 +66,10 @@ public class PostService {
     @Transactional
     public List<Post> search(String keyword){
         return postRepository.findByTitleContaining(keyword);
+    }
+
+    @Transactional
+    public List<Post> popularList(){
+        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "goodCount"));
     }
 }
