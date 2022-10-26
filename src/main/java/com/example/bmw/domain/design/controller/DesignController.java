@@ -15,8 +15,8 @@ public class DesignController {
     private final DesignService designService;
 
     @PostMapping("/design")
-    public Design save(@RequestPart MultipartFile multipartFile, @RequestBody DesignNameRequest request) throws IOException {
-        return designService.save(multipartFile, request.getDesignName());
+    public Design save(@ModelAttribute DesignNameRequest request) throws IOException {
+        return designService.save(request.getFile(), request.getDesignName());
     }
 
     @DeleteMapping("/design")

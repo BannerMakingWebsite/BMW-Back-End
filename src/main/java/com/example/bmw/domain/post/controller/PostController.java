@@ -16,7 +16,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/template")
-    public Post upload(UploadRequest upload) throws Exception{
+    public Post upload(@ModelAttribute UploadRequest upload) throws Exception{
         return postService.upload(upload.getFile(), upload.getTitle(), upload.getName());
     }
 
