@@ -86,6 +86,7 @@ public class User{
         this.email = email;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.authority = Authority.USER;
     }
 
     public User(String password, String name) {
