@@ -109,7 +109,7 @@ public class AuthService {
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new RuntimeException("패스워드가 다릅니다.");
         }
-        String accessToken = tokenProvider.createAccessToken(user.getEmail());
+        String accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());
         String refreshToken = tokenProvider.createRefreshToken();
 
         user.updateRefreshToken(refreshToken);
@@ -135,7 +135,7 @@ public class AuthService {
                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
 
                 if(refreshToken.equals(user.getRefreshToken())) {
-                    accessToken = tokenProvider.createAccessToken(user.getEmail());
+                    accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());
                 }
                 else {
                     log.info("토큰이 변조되었습니다.");

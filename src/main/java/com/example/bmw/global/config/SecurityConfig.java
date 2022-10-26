@@ -1,5 +1,6 @@
 package com.example.bmw.global.config;
 
+import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.global.jwt.JwtFilter;
 import com.example.bmw.global.jwt.TokenProvider;
 import com.example.bmw.global.oauth.CustomOAuth2UserService;
@@ -64,7 +65,7 @@ public class SecurityConfig {
                 .permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()

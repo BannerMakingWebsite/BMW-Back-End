@@ -1,6 +1,7 @@
 package com.example.bmw.global.oauth;
 
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
+import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.global.config.AppProperties;
 import com.example.bmw.global.jwt.TokenProvider;
 import com.example.bmw.global.util.CookieUtils;
@@ -53,7 +54,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         TokenResponse token = new TokenResponse(
-                tokenProvider.createAccessToken(userPrincipal.getEmail()), tokenProvider.createRefreshToken());
+                tokenProvider.createAccessToken(userPrincipal.getEmail(), Authority.USER), tokenProvider.createRefreshToken());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("AccessToken", token.getAccessToken())

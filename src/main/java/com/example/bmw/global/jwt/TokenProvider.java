@@ -1,5 +1,6 @@
 package com.example.bmw.global.jwt;
 
+import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.global.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,9 @@ public class TokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createAccessToken(String email) {
+    public String createAccessToken(String email, Authority role) {
         Claims claims = Jwts.claims().setSubject(email);
+        claims.put("role", role);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
