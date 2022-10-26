@@ -82,17 +82,17 @@ public class User{
         this.password = password;
     }
 
+    public void oauthUpdate(String name, String email, String imageUrl){
+        this.email = email;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
+
     public User(String password, String name) {
         this.password = password;
         this.name = name;
         this.authority = Authority.USER;
         this.isVerify = false;
-    }
-
-    public void oauthUpdate(String name, String email, String imageUrl){
-        this.email = email;
-        this.name = name;
-        this.imageUrl = imageUrl;
     }
 
     public void profileUpdate(String name){
