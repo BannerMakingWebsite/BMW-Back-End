@@ -1,12 +1,9 @@
 package com.example.bmw.global.config;
 
-import com.example.bmw.domain.user.entity.Authority;
+import com.example.bmw.global.auth.AuthDetailService;
 import com.example.bmw.global.jwt.JwtFilter;
 import com.example.bmw.global.jwt.TokenProvider;
-import com.example.bmw.global.oauth.CustomOAuth2UserService;
-import com.example.bmw.global.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.example.bmw.global.oauth.OAuth2AuthenticationFailureHandler;
-import com.example.bmw.global.oauth.OAuth2AuthenticationSuccessHandler;
+import com.example.bmw.global.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -33,14 +30,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final AuthDetailService oauth2UserService;
 
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
@@ -53,29 +44,22 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 .authorizeRequests()
-                .antMatchers("/bmw",
-                        "/login",
-                        "/signup",
-                        "/send",
-                        "/password",
-                        "/signUpConfirm",
-                        "/passwordConfirm",
-                        "/passwordReset")
+                .antMatchers("/bmw", "/login", "/signup", "/send", "/password",
+                        "/signUpConfirm", "/passwordConfirm", "/passwordReset")
                 .permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
-                .oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler)
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+
+                .oauth2Login()
+                .successHandler(oAuth2SuccessHandler)
+                .userInfoEndpoint().userService(oauth2UserService);
 
 
         http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

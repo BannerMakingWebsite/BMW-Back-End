@@ -1,7 +1,7 @@
 package com.example.bmw.global.jwt;
 
 import com.example.bmw.domain.user.entity.Authority;
-import com.example.bmw.global.service.CustomUserDetailsService;
+import com.example.bmw.global.auth.AuthDetailService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -31,10 +27,7 @@ public class TokenProvider {
     private long ACCESS_TOKEN_VALID_TIME = 1000L * 60 * 60; //1시간
 
     private long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7; //일주일
-
-    private final CustomUserDetailsService customUserDetailsService;
-    public static final String HEADER_ACCESS_TOKEN = "Authorization";
-    public static final String HEADER_REFRESH_TOKEN = "X-REFRESH-TOKEN";
+    public static final String HEADER_REFRESH_TOKEN = "RefreshToken";
 
     @PostConstruct
     protected void init() {
@@ -62,17 +55,12 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(getUserEmail(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
     public String getUserEmail(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
     public String resolveAccessToken(HttpServletRequest request) {
-        return request.getHeader(HEADER_ACCESS_TOKEN);
+        return request.getHeader("Authorization");
     }
 
     public String resolveRefreshToken(HttpServletRequest request) {
@@ -81,8 +69,8 @@ public class TokenProvider {
 
     public boolean validateAccessToken(String accessToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
-            return claims.getBody().getExpiration().before(new Date());
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
+            return true;
         } catch (ExpiredJwtException e) {
             return true;
         } catch (Exception e) {

@@ -82,11 +82,9 @@ public class User{
         this.password = password;
     }
 
-    public void oauthUpdate(String name, String email, String imageUrl){
-        this.email = email;
+    public void oauthUpdate(String name, String imageUrl){
         this.name = name;
         this.imageUrl = imageUrl;
-        this.authority = Authority.USER;
     }
 
     public User(String password, String name) {
