@@ -22,8 +22,8 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
-        mailSender.setUsername("whee007@naver.com");
-        mailSender.setPassword("parkwe007");
+        mailSender.setUsername("");
+        mailSender.setPassword("");
         mailSender.setDefaultEncoding("utf-8");
         mailSender.setJavaMailProperties(properties);
 
