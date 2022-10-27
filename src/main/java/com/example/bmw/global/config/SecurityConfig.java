@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
 
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
