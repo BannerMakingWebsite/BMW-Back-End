@@ -1,5 +1,6 @@
 package com.example.bmw.global.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,6 +10,12 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfig {
+
+    @Value("${spring.mail.username}")
+    private String email;
+
+    @Value("${spring.mail.password}")
+    private String password;
 
     @Bean(name = "mailSender")
     public JavaMailSender getJavaMailSender(){
@@ -22,8 +29,8 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
-        mailSender.setUsername("");
-        mailSender.setPassword("");
+        mailSender.setUsername(email);
+        mailSender.setPassword(password);
         mailSender.setDefaultEncoding("utf-8");
         mailSender.setJavaMailProperties(properties);
 
