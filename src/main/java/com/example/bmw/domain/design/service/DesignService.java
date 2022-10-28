@@ -7,6 +7,8 @@ import com.example.bmw.domain.design.repository.DesignRepository;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,7 @@ public class DesignService {
     @Transactional
     public Design save(MultipartFile multipartFile, String designName) throws IOException {
         isExist(designName);
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
@@ -55,7 +57,7 @@ public class DesignService {
     @Transactional
     public void delete(String designName){
         amazonS3.deleteObject(bucket, designName);
-        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         designRepository.delete(design);
     }
 

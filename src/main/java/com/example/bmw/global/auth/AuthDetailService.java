@@ -3,6 +3,8 @@ package com.example.bmw.global.auth;
 import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +54,7 @@ public class AuthDetailService extends DefaultOAuth2UserService implements UserD
                     .authority(Authority.USER)
                     .build());
         }else{
-            User user = userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow(()-> new IllegalArgumentException("NOT_FOUND"));
+            User user = userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND));
             user.oauthUpdate(oAuth2User.getAttribute("name"), oAuth2User.getAttribute("picture"));
             userRepository.save(user);
         }

@@ -6,6 +6,8 @@ import com.example.bmw.domain.user.controller.dto.request.SignupRequest;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.jwt.TokenProvider;
 import com.example.bmw.global.util.MailUtils;
 import lombok.RequiredArgsConstructor;
@@ -91,7 +93,7 @@ public class AuthService {
 
     @Transactional
     public User signup(SignupRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("이메일이 없습니다."));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         if(!user.isVerify()){
             throw new RuntimeException("이메일 인증이 되지 않았거나 이미 가입된 email입니다.");
         }
@@ -105,7 +107,7 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("가입된 이메일이 아닙니다."));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new RuntimeException("패스워드가 다릅니다.");
         }
@@ -132,7 +134,7 @@ public class AuthService {
                 log.info("refresh Token 은 유효합니다.");
 
                 User user = userRepository.findByEmail(tokenProvider.getUserEmail(refreshToken))
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
                 if(refreshToken.equals(user.getRefreshToken())) {
                     accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());

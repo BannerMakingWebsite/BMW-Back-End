@@ -7,6 +7,8 @@ import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ public class CommentService {
 
     @Transactional
     public void save(CommentRequest commentRequest, int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         Comment comment = new Comment(user, post, commentRequest.getComment());
         commentRepository.save(comment);
@@ -31,7 +33,7 @@ public class CommentService {
 
     @Transactional
     public void delete(int id){
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         commentRepository.delete(comment);
     }
 }

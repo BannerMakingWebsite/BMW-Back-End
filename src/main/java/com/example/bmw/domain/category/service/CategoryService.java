@@ -2,6 +2,8 @@ package com.example.bmw.domain.category.service;
 
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.repository.CategoryRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +22,12 @@ public class CategoryService {
 
     @Transactional
     public void delete(String name){
-        Category category = categoryRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         categoryRepository.delete(category);
     }
 
     @Transactional
     public Category detail(String name){
-        return categoryRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("not found"));
+        return categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
 }

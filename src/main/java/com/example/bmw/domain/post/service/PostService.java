@@ -8,6 +8,8 @@ import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +35,8 @@ public class PostService {
 
     @Transactional
     public Post upload(MultipartFile multipartFile, String title, String name) throws IOException {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Category category = categoryRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
@@ -48,14 +50,14 @@ public class PostService {
 
     @Transactional
     public void delete(int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         amazonS3.deleteObject(bucket, post.getS3FileName());
         postRepository.delete(post);
     }
 
     @Transactional
     public Post detail(int id){
-        return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        return postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
 
     @Transactional

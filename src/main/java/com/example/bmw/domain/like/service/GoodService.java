@@ -6,6 +6,8 @@ import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,8 @@ public class GoodService {
 
     @Transactional
     public void insertGood(int postId) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Good like = new Good(post, user);
 
         if(isNotAlreadyGood(post, user)){
@@ -41,9 +43,9 @@ public class GoodService {
 
     @Transactional
     public void deleteGood(int postId) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Good good = goodRepository.findByUserAndPost(user, post).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Good good = goodRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         goodRepository.delete(good);
 
         post.setGoodCount(post.getGoodCount() - 1);

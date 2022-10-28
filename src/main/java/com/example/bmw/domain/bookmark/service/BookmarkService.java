@@ -6,6 +6,8 @@ import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ public class BookmarkService {
 
     @Transactional
     public void addBookmark(int postId){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         Bookmark bookmark = new Bookmark(user, post);
         bookmarkRepository.save(bookmark);
@@ -34,10 +36,10 @@ public class BookmarkService {
 
     @Transactional
     public void deleteBookmark(int postId){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         bookmarkRepository.delete(bookmark);
 
         post.setBookmarkCount(post.getGoodCount() - 1);
@@ -46,7 +48,7 @@ public class BookmarkService {
 
     @Transactional
     public List<Bookmark> bookmarkList(){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new IllegalArgumentException("not found"));
-        return bookmarkRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("not found"));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
     }
 }
