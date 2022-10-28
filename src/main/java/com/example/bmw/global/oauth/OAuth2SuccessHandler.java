@@ -31,7 +31,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserDto userDto = userRequestMapper.toDto(oAuth2User);
 
         log.info("Principal에서 꺼낸 oauth2User : {}", oAuth2User);
-        // 최초 로그인이라면 회원가입 처리를 한다.
 
         log.info("토큰 발행 시작");
 
