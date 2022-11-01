@@ -1,4 +1,4 @@
-package com.example.bmw.global.config;
+package com.example.bmw.global.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
