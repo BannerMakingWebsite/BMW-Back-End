@@ -4,11 +4,13 @@ import com.example.bmw.domain.user.controller.dto.request.LoginRequest;
 import com.example.bmw.domain.user.controller.dto.request.PasswordRequest;
 import com.example.bmw.domain.user.controller.dto.request.SignupRequest;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
+import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.error.ErrorCode;
 import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.jwt.TokenProvider;
+import com.example.bmw.global.redis.RedisDao;
 import com.example.bmw.global.util.MailUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final JavaMailSender mailSender;
+    private final RedisDao redisDao;
 
     @Transactional
     public void send(String email){
@@ -112,9 +115,8 @@ public class AuthService {
             throw new RuntimeException("패스워드가 다릅니다.");
         }
         String accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());
-        String refreshToken = tokenProvider.createRefreshToken();
+        String refreshToken = tokenProvider.createRefreshToken(user.getEmail());
 
-        user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
         return TokenResponse.builder()
@@ -133,15 +135,12 @@ public class AuthService {
             if(tokenProvider.validateRefreshToken(refreshToken)) {
                 log.info("refresh Token 은 유효합니다.");
 
-                User user = userRepository.findByEmail(tokenProvider.getUserEmail(refreshToken))
-                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                String email = tokenProvider.getUserEmail(refreshToken);
+                String rtkRedis = redisDao.getValues(email);
 
-                if(refreshToken.equals(user.getRefreshToken())) {
-                    accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());
-                }
-                else {
-                    log.info("토큰이 변조되었습니다.");
-                }
+                if(Objects.isNull(rtkRedis))
+                    throw new CustomException(ErrorCode.FORBIDDEN);
+                accessToken = tokenProvider.createAccessToken(email, Authority.USER);
             }
             else {
                 log.info("Refresh Token 이 유효하지 않습니다.");

@@ -64,14 +64,8 @@ public class User{
 
     private String authKey;
 
-    private String refreshToken;
-
     public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public void verify(){

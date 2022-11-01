@@ -1,18 +1,16 @@
 package com.example.bmw.global.jwt;
 
 import com.example.bmw.domain.user.entity.Authority;
-import com.example.bmw.global.auth.AuthDetailService;
+import com.example.bmw.global.redis.RedisDao;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
@@ -28,6 +26,7 @@ public class TokenProvider {
 
     private long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 7; //일주일
     public static final String HEADER_REFRESH_TOKEN = "RefreshToken";
+    private final RedisDao redisDao;
 
     @PostConstruct
     protected void init() {
@@ -46,13 +45,16 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken() {
+    public String createRefreshToken(String email) {
         Date now = new Date();
-        return Jwts.builder()
+        String refresh =  Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+        redisDao.setValues(email, refresh, Duration.ofMillis(REFRESH_TOKEN_VALID_TIME));
+        return refresh;
+
     }
 
     public String getUserEmail(String token) {

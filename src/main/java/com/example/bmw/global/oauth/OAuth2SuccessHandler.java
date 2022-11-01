@@ -35,7 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("토큰 발행 시작");
 
         TokenResponse token = new TokenResponse(
-                tokenProvider.createAccessToken(userDto.getEmail(), Authority.USER), tokenProvider.createRefreshToken());
+                tokenProvider.createAccessToken(userDto.getEmail(), Authority.USER), tokenProvider.createRefreshToken(userDto.getEmail()));
         log.info("AccessToken : {}", token.getAccessToken());
         log.info("RefreshToken : {}", token.getRefreshToken());
         log.info("Token : {}", token);
