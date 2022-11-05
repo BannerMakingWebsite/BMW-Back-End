@@ -46,7 +46,6 @@ public class User{
     private String email;
 
     @Column
-    @Size(min = 4, max = 24)
     private String password;
 
     @Column
@@ -81,7 +80,7 @@ public class User{
         this.imageUrl = imageUrl;
     }
 
-    public User(String password, String name) {
+    public void signup(String password, String name) {
         this.password = password;
         this.name = name;
         this.authority = Authority.USER;

@@ -103,7 +103,7 @@ public class AuthService {
 
         checkPassword(request.getPassword());
 
-        user = new User(request.getPassword(), request.getName());
+        user.signup(request.getPassword(), request.getName());
         user.passwordEncode(passwordEncoder);
         return userRepository.save(user);
     }
