@@ -3,9 +3,11 @@ package com.example.bmw.domain.post.entity;
 import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.comment.entity.Comment;
+import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,22 +41,22 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @JsonIgnore
+    @OneToOne
+    private Design design;
+
     @Column
     private String title;
-
-    @Column
-    private String s3FileName;
-
-    @Column
-    private String s3FileUrl;
 
     @Column
     private int goodCount;
@@ -65,15 +67,14 @@ public class Post {
     @Column
     private LocalDateTime createTime;
 
-    public Post(String s3FileName, String s3FileUrl, String title, User user, Category category){
+    public Post(String title, User user, Category category, Design design){
         this.user = user;
-        this.s3FileUrl = s3FileUrl;
-        this.s3FileName = s3FileName;
         this.goodCount = 0;
         this.bookmarkCount = 0;
         this.createTime = LocalDateTime.now();
         this.title = title;
         this.category = category;
+        this.design = design;
     }
 
     public void setGoodCount(int goodCount){

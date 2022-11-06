@@ -11,5 +11,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadRequest {
     private String title;
     private String name;
-    private MultipartFile file;
+    private String designName;
 }

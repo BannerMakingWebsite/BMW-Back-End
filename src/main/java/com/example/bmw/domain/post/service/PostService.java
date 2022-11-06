@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.repository.CategoryRepository;
+import com.example.bmw.domain.design.entity.Design;
+import com.example.bmw.domain.design.repository.DesignRepository;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
@@ -32,26 +34,21 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final DesignRepository designRepository;
 
     @Transactional
-    public Post upload(MultipartFile multipartFile, String title, String name) throws IOException {
+    public Post upload(String designName, String title, String name) {
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        ObjectMetadata objMeta = new ObjectMetadata();
-        objMeta.setContentLength(multipartFile.getInputStream().available());
-
-        amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
-
-        Post saveImage = new Post(s3FileName, amazonS3.getUrl(bucket, s3FileName).toString() ,title, user, category);
+        Post saveImage = new Post(title, user, category, design);
         return postRepository.save(saveImage);
     }
 
     @Transactional
     public void delete(int id){
         Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        amazonS3.deleteObject(bucket, post.getS3FileName());
         postRepository.delete(post);
     }
 

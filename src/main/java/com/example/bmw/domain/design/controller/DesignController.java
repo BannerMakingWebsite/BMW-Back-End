@@ -1,11 +1,11 @@
 package com.example.bmw.domain.design.controller;
 
 import com.example.bmw.domain.design.controller.dto.reqeust.DesignNameRequest;
-import com.example.bmw.domain.design.controller.dto.reqeust.DesignRequest;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.design.service.DesignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -15,8 +15,9 @@ public class DesignController {
     private final DesignService designService;
 
     @PostMapping("/design")
-    public Design save(@ModelAttribute DesignRequest request) throws IOException {
-        return designService.save(request.getFile(), request.getDesignName());
+    public Design save(@RequestPart(value = "file", required = false) MultipartFile file,
+                       @RequestPart(value = "name") DesignNameRequest request) throws IOException {
+        return designService.save(file, request.getDesignName());
     }
 
     @DeleteMapping("/design")
