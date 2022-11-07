@@ -1,5 +1,6 @@
 package com.example.bmw.domain.bookmark.controller;
 
+import com.example.bmw.domain.bookmark.controller.dto.response.BookmarkResponse;
 import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class BookmarkController {
     }
 
     @GetMapping("/template/bookmark/list")
-    public List<Bookmark> bookmarkList(){
+    public List<BookmarkResponse> bookmarkList(){
         return bookmarkService.bookmarkList();
     }
 }

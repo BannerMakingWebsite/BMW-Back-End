@@ -1,5 +1,6 @@
 package com.example.bmw.domain.bookmark.service;
 
+import com.example.bmw.domain.bookmark.controller.dto.response.BookmarkResponse;
 import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.bookmark.repository.BookmarkRepository;
 import com.example.bmw.domain.post.entity.Post;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +49,9 @@ public class BookmarkService {
     }
 
     @Transactional
-    public List<Bookmark> bookmarkList(){
+    public List<BookmarkResponse> bookmarkList(){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        return bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        List<Bookmark> bookmarks = bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return bookmarks.stream().map(m -> new BookmarkResponse(m.getUser(), m.getPost())).collect(Collectors.toList());
     }
 }
