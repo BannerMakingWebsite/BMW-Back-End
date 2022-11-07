@@ -8,6 +8,7 @@ import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,17 +42,15 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"design"})
     @OneToOne
     private Design design;
 

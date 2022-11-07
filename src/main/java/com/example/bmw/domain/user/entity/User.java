@@ -5,6 +5,8 @@ import com.example.bmw.domain.comment.entity.Comment;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.post.entity.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +40,7 @@ public class User{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
-
+    
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> posts;
 

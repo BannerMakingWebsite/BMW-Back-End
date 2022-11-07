@@ -2,7 +2,7 @@ package com.example.bmw.domain.comment.entity;
 
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.user.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,12 +22,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
