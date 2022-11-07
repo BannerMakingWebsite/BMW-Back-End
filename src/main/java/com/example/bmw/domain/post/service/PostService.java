@@ -6,6 +6,7 @@ import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.repository.CategoryRepository;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.design.repository.DesignRepository;
+import com.example.bmw.domain.post.controller.dto.response.PostResponse;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.user.entity.User;
@@ -23,6 +24,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,13 +39,14 @@ public class PostService {
     private final DesignRepository designRepository;
 
     @Transactional
-    public Post upload(String designName, String title, String name) {
+    public PostResponse upload(String designName, String title, String name) {
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
         Post saveImage = new Post(title, user, category, design);
-        return postRepository.save(saveImage);
+        postRepository.save(saveImage);
+        return PostResponse.builder().build();
     }
 
     @Transactional
@@ -53,22 +56,63 @@ public class PostService {
     }
 
     @Transactional
-    public Post detail(int id){
-        return postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+    public PostResponse detail(int id){
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return PostResponse.builder()
+                .id(post.getId())
+                .comments(post.getComments())
+                .user(post.getUser())
+                .category(post.getCategory())
+                .design(post.getDesign())
+                .title(post.getTitle())
+                .goodCount(post.getGoodCount())
+                .bookmarkCount(post.getBookmarkCount())
+                .createTime(post.getCreateTime())
+                .build();
     }
 
     @Transactional
-    public List<Post> list(){
-        return postRepository.findAll();
+    public List<PostResponse> list(){
+        List<Post> post = postRepository.findAll();
+        return post.stream().map(p -> new PostResponse(
+                p.getId(),
+                p.getComments(),
+                p.getUser(),
+                p.getCategory(),
+                p.getDesign(),
+                p.getTitle(),
+                p.getGoodCount(),
+                p.getBookmarkCount(),
+                p.getCreateTime())).collect(Collectors.toList());
     }
 
     @Transactional
-    public List<Post> search(String keyword){
-        return postRepository.findByTitleContaining(keyword);
+    public List<PostResponse> search(String keyword){
+        List<Post> post = postRepository.findByTitleContaining(keyword);
+        return post.stream().map(p -> new PostResponse(
+                p.getId(),
+                p.getComments(),
+                p.getUser(),
+                p.getCategory(),
+                p.getDesign(),
+                p.getTitle(),
+                p.getGoodCount(),
+                p.getBookmarkCount(),
+                p.getCreateTime())).collect(Collectors.toList());
     }
 
     @Transactional
-    public List<Post> popularList(){
-        return postRepository.findAll(Sort.by(Sort.Direction.DESC, "goodCount"));
+    public List<PostResponse> popularList(){
+        List<Post> post = postRepository.findAll(Sort.by(Sort.Direction.DESC, "goodCount"));
+        return post.stream().map(p -> new PostResponse(
+                p.getId(),
+                p.getComments(),
+                p.getUser(),
+                p.getCategory(),
+                p.getDesign(),
+                p.getTitle(),
+                p.getGoodCount(),
+                p.getBookmarkCount(),
+                p.getCreateTime())).collect(Collectors.toList());
     }
 }

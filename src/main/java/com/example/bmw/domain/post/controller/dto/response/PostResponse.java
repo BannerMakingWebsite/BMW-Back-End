@@ -8,6 +8,7 @@ import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.user.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,11 +19,9 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PostResponse {
     private Integer id;
-    private List<Good> goods;
-    private List<Bookmark> bookmarks;
-    private List<Report> reports;
     private List<Comment> comments;
     private User user;
     private Category category;

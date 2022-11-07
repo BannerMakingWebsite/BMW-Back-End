@@ -1,6 +1,7 @@
 package com.example.bmw.domain.post.controller;
 
 import com.example.bmw.domain.post.controller.dto.request.UploadRequest;
+import com.example.bmw.domain.post.controller.dto.response.PostResponse;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/template")
-    public Post upload(@RequestBody UploadRequest upload) throws Exception{
+    public PostResponse upload(@RequestBody UploadRequest upload) throws Exception{
         return postService.upload(upload.getDesignName(), upload.getTitle(), upload.getName());
     }
 
@@ -26,22 +27,22 @@ public class PostController {
     }
 
     @GetMapping("/template/{id}")
-    public Post detail(@PathVariable int id){
+    public PostResponse detail(@PathVariable int id){
         return postService.detail(id);
     }
 
     @GetMapping("/template/list")
-    public List<Post> list(){
+    public List<PostResponse> list(){
         return postService.list();
     }
 
     @GetMapping("/template")
-    public List<Post> search(@RequestParam String keyword){
+    public List<PostResponse> search(@RequestParam String keyword){
         return postService.search(keyword);
     }
 
     @GetMapping("/template/popular")
-    public List<Post> popularList(){
+    public List<PostResponse> popularList(){
         return postService.popularList();
     }
 }
