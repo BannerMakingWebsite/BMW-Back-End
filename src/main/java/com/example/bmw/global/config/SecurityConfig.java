@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .antMatchers("/bmw", "/login", "/signup", "/send", "/password",
                         "/signUpConfirm", "/passwordConfirm", "/passwordReset")
                 .permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/swagger-ui/**", "/swagger-resources/**", "/v3/**").permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
