@@ -1,6 +1,7 @@
 package com.example.bmw.domain.user.service;
 
 import com.example.bmw.domain.user.controller.dto.request.DeleteUserRequest;
+import com.example.bmw.domain.user.controller.dto.response.UserResponse;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.error.ErrorCode;
@@ -20,17 +21,41 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User profile(){
-        return userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+    public UserResponse profile(){
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return UserResponse.builder()
+                .id(user.getId())
+                .designs(user.getDesigns())
+                .goods(user.getGoods())
+                .bookmarks(user.getBookmarks())
+                .comments(user.getComments())
+                .posts(user.getPosts())
+                .email(user.getEmail())
+                .name(user.getName())
+                .imageUrl(user.getImageUrl())
+                .authority(user.getAuthority())
+                .build();
     }
 
     @Transactional
-    public User profileUpdate(String name){
+    public UserResponse profileUpdate(String name){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         user.profileUpdate(name);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return UserResponse.builder()
+                .id(user.getId())
+                .designs(user.getDesigns())
+                .goods(user.getGoods())
+                .bookmarks(user.getBookmarks())
+                .comments(user.getComments())
+                .posts(user.getPosts())
+                .email(user.getEmail())
+                .name(user.getName())
+                .imageUrl(user.getImageUrl())
+                .authority(user.getAuthority())
+                .build();
     }
 
     @Transactional

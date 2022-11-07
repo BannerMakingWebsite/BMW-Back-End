@@ -2,6 +2,7 @@ package com.example.bmw.domain.user.controller;
 
 import com.example.bmw.domain.user.controller.dto.request.*;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
+import com.example.bmw.domain.user.controller.dto.response.UserResponse;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public User signup(@RequestBody SignupRequest request){
+    public UserResponse signup(@RequestBody SignupRequest request){
         return authService.signup(request);
     }
 

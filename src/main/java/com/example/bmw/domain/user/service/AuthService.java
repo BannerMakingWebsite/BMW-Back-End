@@ -4,6 +4,7 @@ import com.example.bmw.domain.user.controller.dto.request.LoginRequest;
 import com.example.bmw.domain.user.controller.dto.request.PasswordRequest;
 import com.example.bmw.domain.user.controller.dto.request.SignupRequest;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
+import com.example.bmw.domain.user.controller.dto.response.UserResponse;
 import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
@@ -95,7 +96,7 @@ public class AuthService {
     }
 
     @Transactional
-    public User signup(SignupRequest request){
+    public UserResponse signup(SignupRequest request){
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         if(!user.isVerify()){
             throw new RuntimeException("이메일 인증이 되지 않았거나 이미 가입된 email입니다.");
@@ -105,7 +106,19 @@ public class AuthService {
 
         user.signup(request.getPassword(), request.getName());
         user.passwordEncode(passwordEncoder);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return UserResponse.builder()
+                .id(user.getId())
+                .designs(user.getDesigns())
+                .goods(user.getGoods())
+                .bookmarks(user.getBookmarks())
+                .comments(user.getComments())
+                .posts(user.getPosts())
+                .email(user.getEmail())
+                .name(user.getName())
+                .imageUrl(user.getImageUrl())
+                .authority(user.getAuthority())
+                .build();
     }
 
     @Transactional
