@@ -5,8 +5,6 @@ import com.example.bmw.domain.comment.entity.Comment;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.post.entity.Post;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -40,7 +37,7 @@ public class User{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> posts;
 

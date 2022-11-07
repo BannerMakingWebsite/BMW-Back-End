@@ -1,8 +1,6 @@
 package com.example.bmw.domain.design.entity;
 
 import com.example.bmw.domain.user.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

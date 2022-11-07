@@ -1,7 +1,6 @@
 package com.example.bmw.domain.category.entity;
 
 import com.example.bmw.domain.post.entity.Post;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
