@@ -1,5 +1,6 @@
 package com.example.bmw.domain.category.service;
 
+import com.example.bmw.domain.category.controller.dto.response.CategoryResponse;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.repository.CategoryRepository;
 import com.example.bmw.global.error.ErrorCode;
@@ -15,9 +16,13 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public Category save(String name){
+    public CategoryResponse save(String name){
         Category category = new Category(name);
-        return categoryRepository.save(category);
+        categoryRepository.save(category);
+        return CategoryResponse.builder()
+                .posts(category.getPosts())
+                .name(category.getName())
+                .build();
     }
 
     @Transactional
@@ -27,7 +32,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category detail(String name){
-        return categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+    public CategoryResponse detail(String name){
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return CategoryResponse.builder()
+                .posts(category.getPosts())
+                .name(category.getName())
+                .build();
     }
 }

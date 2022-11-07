@@ -1,6 +1,7 @@
 package com.example.bmw.domain.category.controller;
 
 import com.example.bmw.domain.category.controller.dto.request.CategoryRequest;
+import com.example.bmw.domain.category.controller.dto.response.CategoryResponse;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/template/category")
-    public Category save(@RequestBody CategoryRequest categoryRequest){
+    public CategoryResponse save(@RequestBody CategoryRequest categoryRequest){
         return categoryService.save(categoryRequest.getName());
     }
 
@@ -22,7 +23,7 @@ public class CategoryController {
     }
 
     @GetMapping("/template/category")
-    public Category detail(@RequestBody CategoryRequest categoryRequest){
+    public CategoryResponse detail(@RequestBody CategoryRequest categoryRequest){
         return categoryService.detail(categoryRequest.getName());
     }
 }
