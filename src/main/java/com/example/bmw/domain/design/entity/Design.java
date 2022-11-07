@@ -1,6 +1,7 @@
 package com.example.bmw.domain.design.entity;
 
 import com.example.bmw.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Design {
     @Column
     private String designUrl;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
