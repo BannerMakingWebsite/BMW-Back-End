@@ -2,6 +2,7 @@ package com.example.bmw.domain.design.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.example.bmw.domain.design.controller.dto.response.DesignResponse;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.design.repository.DesignRepository;
 import com.example.bmw.domain.post.entity.Post;
@@ -42,7 +43,7 @@ public class DesignService {
     }
 
     @Transactional
-    public Design save(MultipartFile multipartFile, String designName) throws IOException {
+    public DesignResponse save(MultipartFile multipartFile, String designName) throws IOException {
         isExist(designName);
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
@@ -53,7 +54,13 @@ public class DesignService {
         amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), objMeta);
 
         Design design = new Design(fileName, amazonS3.getUrl(bucket, fileName).toString(), user);
-        return designRepository.save(design);
+        designRepository.save(design);
+        return DesignResponse.builder()
+                .id(design.getId())
+                .designName(design.getDesignName())
+                .designUrl(design.getDesignUrl())
+                .user(design.getUser())
+                .build();
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.example.bmw.domain.design.controller;
 
 import com.example.bmw.domain.design.controller.dto.reqeust.DesignNameRequest;
+import com.example.bmw.domain.design.controller.dto.response.DesignResponse;
 import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.design.service.DesignService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class DesignController {
     private final DesignService designService;
 
     @PostMapping("/design")
-    public Design save(@RequestPart(value = "file", required = false) MultipartFile file,
-                       @RequestPart(value = "name") DesignNameRequest request) throws IOException {
+    public DesignResponse save(@RequestPart(value = "file", required = false) MultipartFile file,
+                               @RequestPart(value = "name") DesignNameRequest request) throws IOException {
         return designService.save(file, request.getDesignName());
     }
 
