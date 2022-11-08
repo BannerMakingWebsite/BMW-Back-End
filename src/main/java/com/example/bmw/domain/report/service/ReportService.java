@@ -1,14 +1,19 @@
 package com.example.bmw.domain.report.service;
 
+import com.example.bmw.domain.post.controller.dto.response.PostResponse;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
+import com.example.bmw.domain.report.controller.dto.response.ReportResponse;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.report.repository.ReportRepository;
+import com.example.bmw.global.error.ErrorCode;
+import com.example.bmw.global.error.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +34,17 @@ public class ReportService {
     }
 
     @Transactional
-    public List<Report> reportList(){
-        return reportRepository.findAll();
+    public List<ReportResponse> reportList(){
+        List<Report> report = reportRepository.findAll();
+        return report.stream().map(r -> new ReportResponse(r.getId(), r.getPost())).collect(Collectors.toList());
     }
 
     @Transactional
-    public Report detail(int id){
-        return reportRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+    public ReportResponse detail(int id){
+        Report report = reportRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        return ReportResponse.builder()
+                .id(report.getId())
+                .post(report.getPost())
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.bmw.domain.report.controller;
 
+import com.example.bmw.domain.report.controller.dto.response.ReportResponse;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
 
-    @PostMapping("template/report/{id}")
+    @PostMapping("/report/{id}")
     public void report(@PathVariable int id){
         reportService.report(id);
     }
@@ -23,12 +24,12 @@ public class ReportController {
     }
 
     @GetMapping("/report/list")
-    public List<Report> list(){
+    public List<ReportResponse> list(){
         return reportService.reportList();
     }
 
     @GetMapping("/report/{id}")
-    public Report detail(@PathVariable int id){
+    public ReportResponse detail(@PathVariable int id){
         return reportService.detail(id);
     }
 }
