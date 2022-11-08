@@ -44,9 +44,19 @@ public class PostService {
         Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        Post saveImage = new Post(title, user, category, design);
-        postRepository.save(saveImage);
-        return PostResponse.builder().build();
+        Post post = new Post(title, user, category, design);
+        postRepository.save(post);
+        return PostResponse.builder()
+                .id(post.getId())
+                .comments(post.getComments())
+                .user(post.getUser())
+                .category(post.getCategory())
+                .design(post.getDesign())
+                .title(post.getTitle())
+                .goodCount(post.getGoodCount())
+                .bookmarkCount(post.getBookmarkCount())
+                .createTime(post.getCreateTime())
+                .build();
     }
 
     @Transactional
