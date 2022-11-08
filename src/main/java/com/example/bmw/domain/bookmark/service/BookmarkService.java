@@ -32,7 +32,7 @@ public class BookmarkService {
         Bookmark bookmark = new Bookmark(user, post);
         bookmarkRepository.save(bookmark);
 
-        post.setBookmarkCount(post.getGoodCount() + 1);
+        post.setBookmarkCount(post.getBookmarkCount() + 1);
         postRepository.save(post);
     }
 
@@ -44,7 +44,7 @@ public class BookmarkService {
         Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
         bookmarkRepository.delete(bookmark);
 
-        post.setBookmarkCount(post.getGoodCount() - 1);
+        post.setBookmarkCount(post.getBookmarkCount() - 1);
         postRepository.save(post);
     }
 
