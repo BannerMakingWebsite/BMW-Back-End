@@ -1,5 +1,6 @@
 package com.example.bmw.domain.design.entity;
 
+import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,9 @@ public class Design {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(mappedBy = "design")
+    private Post post;
 
     public Design(String designName, String designUrl, User user){
         this.designName = designName;

@@ -56,6 +56,7 @@ public class Post {
 
     @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "design_id")
     private Design design;
 
     @Column

@@ -67,7 +67,10 @@ public class DesignService {
     public void delete(String designName){
         amazonS3.deleteObject(bucket, designName);
         Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        designRepository.delete(design);
+        if(design.getPost() == null){
+            designRepository.delete(design);
+        }
+        else
+            throw new CustomException(ErrorCode.BAD_REQUEST);
     }
-
 }
