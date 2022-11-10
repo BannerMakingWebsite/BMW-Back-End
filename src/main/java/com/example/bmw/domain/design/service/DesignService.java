@@ -38,6 +38,8 @@ public class DesignService {
 
             if (isExistObject) {
                 amazonS3.deleteObject(bucket, designName);
+                Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                designRepository.delete(design);
             }
         }
     }
