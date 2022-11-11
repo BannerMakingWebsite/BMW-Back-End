@@ -41,13 +41,11 @@ public class AuthService {
 
     @Transactional
     public void send(String email){
-        if(userRepository.existsByEmail(email))
-            throw new RuntimeException("email already exists");
         String authKey = getAuthCode();
 
         try {
             MailUtils sendMail = new MailUtils(mailSender);
-            sendMail.setSubject("회원가입 이메일 인증");
+            sendMail.setSubject("이메일 인증");
             sendMail.setText(new StringBuffer().append("<h1>[이메일 인증]</h1>")
                     .append(authKey)
                     .toString());
@@ -58,10 +56,17 @@ public class AuthService {
             e.printStackTrace();
         }
 
-        userRepository.save(User.builder()
-                        .email(email)
-                        .authKey(authKey)
-                .build());
+        if(userRepository.existsByEmail(email)){
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+            user.setAuthKey(authKey);
+            userRepository.save(user);
+        }
+        else{
+            userRepository.save(User.builder()
+                    .email(email)
+                    .authKey(authKey)
+                    .build());
+        }
     }
 
     @Transactional

@@ -92,6 +92,10 @@ public class User{
         this.isVerify = false;
     }
 
+    public void setAuthKey(String authKey){
+        this.authKey = authKey;
+    }
+
     public void profileUpdate(String name){
         this.name = name;
     }
