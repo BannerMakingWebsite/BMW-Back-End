@@ -21,7 +21,7 @@ public class UserController {
 
     @PatchMapping("/mypage")
     public UserResponse profileUpdate(@RequestBody ProfileUpdateRequest request){
-        return userService.profileUpdate(request.getName());
+        return userService.profileUpdate(request.getName(), request.getImageUrl());
     }
 
     @DeleteMapping("/mypage")

@@ -96,7 +96,8 @@ public class User{
         this.authKey = authKey;
     }
 
-    public void profileUpdate(String name){
+    public void profileUpdate(String name, String imageUrl){
         this.name = name;
+        this.imageUrl = imageUrl;
     }
 }

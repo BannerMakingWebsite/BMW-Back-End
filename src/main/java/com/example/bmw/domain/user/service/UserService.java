@@ -39,10 +39,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse profileUpdate(String name){
+    public UserResponse profileUpdate(String name, String imageUrl){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        user.profileUpdate(name);
+        user.profileUpdate(name, imageUrl);
         userRepository.save(user);
         return UserResponse.builder()
                 .id(user.getId())
