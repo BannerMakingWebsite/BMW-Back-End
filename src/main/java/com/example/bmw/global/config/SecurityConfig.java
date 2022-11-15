@@ -50,7 +50,7 @@ public class SecurityConfig {
                         "/signUpConfirm", "/passwordConfirm", "/passwordReset")
                 .permitAll()
                 .antMatchers("/", "/swagger-ui/**", "/swagger-resources/**", "/v3/**").permitAll()
-                .antMatchers("/auth/**", "/oauth2/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
 

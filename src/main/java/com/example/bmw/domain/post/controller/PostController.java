@@ -2,11 +2,9 @@ package com.example.bmw.domain.post.controller;
 
 import com.example.bmw.domain.post.controller.dto.request.UploadRequest;
 import com.example.bmw.domain.post.controller.dto.response.PostResponse;
-import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/template")
-    public PostResponse upload(@RequestBody UploadRequest upload) throws Exception{
+    public PostResponse upload(@RequestBody UploadRequest upload) {
         return postService.upload(upload.getDesignName(), upload.getTitle(), upload.getName());
     }
 
