@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/template/comment/{id}")
-    public void save(@PathVariable int id, @RequestBody CommentRequest request){
-        commentService.save(request, id);
+    @PostMapping("/template/comment/{postId}")
+    public void save(@PathVariable int postId, @RequestBody CommentRequest request){
+        commentService.save(request, postId);
     }
 
-    @DeleteMapping("/template/comment/{id}")
-    public void delete(@PathVariable int id){
-        commentService.delete(id);
+    @DeleteMapping("/template/comment/{commentId}")
+    public void delete(@PathVariable int commentId){
+        commentService.delete(commentId);
     }
 }
