@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodController {
     private final GoodService goodService;
 
-    @PostMapping("/template/like/{id}")
-    public void insertGood(@PathVariable int id){
-        goodService.insertGood(id);
+    @PostMapping("/template/like/{postId}")
+    public void insertGood(@PathVariable int postId){
+        goodService.insertGood(postId);
     }
 
-    @DeleteMapping("/template/like/{id}")
-    public void deleteGood(@PathVariable int id){
-        goodService.deleteGood(id);
+    @DeleteMapping("/template/like/{postId}")
+    public void deleteGood(@PathVariable int postId){
+        goodService.deleteGood(postId);
     }
 }
