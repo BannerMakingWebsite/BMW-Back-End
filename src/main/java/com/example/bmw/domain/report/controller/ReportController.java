@@ -13,14 +13,14 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
 
-    @PostMapping("/report/{id}")
-    public void report(@PathVariable int id){
-        reportService.report(id);
+    @PostMapping("/report/{postId}")
+    public void report(@PathVariable int postId){
+        reportService.report(postId);
     }
 
-    @DeleteMapping("/report/{id}")
-    public void delete(@PathVariable int id){
-        reportService.deleteReport(id);
+    @DeleteMapping("/report/{reportId}")
+    public void delete(@PathVariable int reportId){
+        reportService.deleteReport(reportId);
     }
 
     @GetMapping("/report/list")
@@ -28,8 +28,8 @@ public class ReportController {
         return reportService.reportList();
     }
 
-    @GetMapping("/report/{id}")
-    public ReportResponse detail(@PathVariable int id){
-        return reportService.detail(id);
+    @GetMapping("/report/{reportId}")
+    public ReportResponse detail(@PathVariable int reportId){
+        return reportService.detail(reportId);
     }
 }
