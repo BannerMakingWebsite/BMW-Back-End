@@ -19,14 +19,14 @@ public class PostController {
         return postService.upload(upload.getDesignName(), upload.getTitle(), upload.getName());
     }
 
-    @DeleteMapping("/template/{id}")
-    public void delete(@PathVariable int id){
-        postService.delete(id);
+    @DeleteMapping("/template/{postId}")
+    public void delete(@PathVariable int postId){
+        postService.delete(postId);
     }
 
-    @GetMapping("/template/{id}")
-    public PostResponse detail(@PathVariable int id){
-        return postService.detail(id);
+    @GetMapping("/template/{[postId}")
+    public PostResponse detail(@PathVariable int postId){
+        return postService.detail(postId);
     }
 
     @GetMapping("/template/list")
