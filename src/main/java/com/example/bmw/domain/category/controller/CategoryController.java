@@ -14,16 +14,16 @@ public class CategoryController {
 
     @PostMapping("/template/category")
     public CategoryResponse save(@RequestBody CategoryRequest categoryRequest){
-        return categoryService.save(categoryRequest.getName());
+        return categoryService.save(categoryRequest.getCategoryName());
     }
 
     @DeleteMapping("/template/category")
     public void delete(@RequestBody CategoryRequest categoryRequest){
-        categoryService.delete(categoryRequest.getName());
+        categoryService.delete(categoryRequest.getCategoryName());
     }
 
     @GetMapping("/template/category")
     public CategoryResponse detail(@RequestBody CategoryRequest categoryRequest){
-        return categoryService.detail(categoryRequest.getName());
+        return categoryService.detail(categoryRequest.getCategoryName());
     }
 }
