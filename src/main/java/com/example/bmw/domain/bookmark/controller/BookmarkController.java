@@ -13,14 +13,14 @@ import java.util.List;
 public class BookmarkController {
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/template/bookmark/{id}")
-    public void addBookmark(@PathVariable int id){
-        bookmarkService.addBookmark(id);
+    @PostMapping("/template/bookmark/{postId}")
+    public void addBookmark(@PathVariable int postId){
+        bookmarkService.addBookmark(postId);
     }
 
-    @DeleteMapping("/template/bookmark/{id}")
-    public void deleteBookmark(@PathVariable int id){
-        bookmarkService.deleteBookmark(id);
+    @DeleteMapping("/template/bookmark/{postId}")
+    public void deleteBookmark(@PathVariable int postId){
+        bookmarkService.deleteBookmark(postId);
     }
 
     @GetMapping("/template/bookmark/list")
