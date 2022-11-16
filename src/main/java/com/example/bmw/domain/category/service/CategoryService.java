@@ -27,13 +27,13 @@ public class CategoryService {
 
     @Transactional
     public void delete(String name){
-        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         categoryRepository.delete(category);
     }
 
     @Transactional
     public CategoryResponse detail(String name){
-        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
         return CategoryResponse.builder()
                 .posts(category.getPosts())
                 .name(category.getName())

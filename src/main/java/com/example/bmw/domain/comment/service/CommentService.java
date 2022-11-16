@@ -24,8 +24,8 @@ public class CommentService {
 
     @Transactional
     public void save(CommentRequest commentRequest, int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
 
         Comment comment = new Comment(user, post, commentRequest.getComment());
         commentRepository.save(comment);
@@ -33,7 +33,7 @@ public class CommentService {
 
     @Transactional
     public void delete(int id){
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
         commentRepository.delete(comment);
     }
 }

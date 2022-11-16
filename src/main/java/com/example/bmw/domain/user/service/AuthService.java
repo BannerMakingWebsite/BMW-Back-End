@@ -57,7 +57,7 @@ public class AuthService {
         }
 
         if(userRepository.existsByEmail(email)){
-            User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
             user.setAuthKey(authKey);
             userRepository.save(user);
         }
@@ -71,7 +71,7 @@ public class AuthService {
 
     @Transactional
     public void verify(String email, String authKey){
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("이메일이 없습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         codeVerify(user.getAuthKey(), authKey);
 
         user.verify();
@@ -80,7 +80,7 @@ public class AuthService {
 
     @Transactional
     public void passwordVerify(String email, String authKey){
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("이메일이 없습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         codeVerify(user.getAuthKey(), authKey);
 
         user.setPasswordVerify(true);
@@ -89,9 +89,9 @@ public class AuthService {
 
     @Transactional
     public void changePassword(PasswordRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("이메일이 없습니다."));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         if(!user.isPasswordVerify()){
-            throw new RuntimeException("이메일 인증이 되지 않았습니다.");
+            throw new CustomException(ErrorCode.UNAUTHORIZED_EMAIL);
         }
         checkPassword(request.getPassword());
         user.setPassword(request.getPassword());
@@ -102,9 +102,9 @@ public class AuthService {
 
     @Transactional
     public UserResponse signup(SignupRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         if(!user.isVerify()){
-            throw new RuntimeException("이메일 인증이 되지 않았거나 이미 가입된 email입니다.");
+            throw new CustomException(ErrorCode.UNAUTHORIZED_EMAIL);
         }
 
         checkPassword(request.getPassword());
@@ -128,9 +128,9 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request){
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("패스워드가 다릅니다.");
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
         }
         String accessToken = tokenProvider.createAccessToken(user.getEmail(), user.getAuthority());
         String refreshToken = tokenProvider.createRefreshToken(user.getEmail());
@@ -157,7 +157,7 @@ public class AuthService {
                 String rtkRedis = redisDao.getValues(email);
 
                 if(Objects.isNull(rtkRedis))
-                    throw new CustomException(ErrorCode.FORBIDDEN);
+                    throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
                 accessToken = tokenProvider.createAccessToken(email, Authority.USER);
             }
             else {
@@ -185,7 +185,7 @@ public class AuthService {
 
     private void codeVerify(String authKey, String requestKey){
         if(!Objects.equals(authKey, requestKey)){
-            throw new RuntimeException("코드가 다릅니다.");
+            throw new CustomException(ErrorCode.CODE_NOT_MATCH);
         }
     }
 
@@ -196,7 +196,7 @@ public class AuthService {
         Matcher passMatcher1 = passPattern1.matcher(pwd);
 
         if(!passMatcher1.find()){
-            throw new RuntimeException("비밀번호는 영문과 특수문자 숫자를 포함하며 8자 이상이어야 합니다.");
+            throw new CustomException(ErrorCode.PASSWORD_SHORT);
         }
 
         // 반복된 문자 확인
@@ -204,7 +204,7 @@ public class AuthService {
         Matcher passMatcher2 = passPattern2.matcher(pwd);
 
         if(passMatcher2.find()){
-            throw new RuntimeException("비밀번호에 동일한 문자를 과도하게 연속해서 사용할 수 없습니다.");
+            throw new CustomException(ErrorCode.SAME_CHAR_PASSWORD);
         }
 
         // 특수문자 확인
@@ -218,7 +218,7 @@ public class AuthService {
             if(passMatcher3.find()){
                 Matcher passMatcher4 = passPattern4.matcher(s);
                 if(!passMatcher4.find()){
-                    throw new RuntimeException("비밀번호에 특수문자는 !@#$^*+=-만 사용 가능합니다.");
+                    throw new CustomException(ErrorCode.OUT_OF_RANGE_SPECIAL_CHAR);
                 }
             }
         }
@@ -252,7 +252,7 @@ public class AuthService {
         }
 
         if(ascSeqCharCnt > 1 || descSeqCharCnt > 1){
-            throw new RuntimeException("비밀번호에 연속된 문자열을 사용할 수 없습니다.");
+            throw new CustomException(ErrorCode.CONTINUOUS_PASSWORD);
         }
     }
 }

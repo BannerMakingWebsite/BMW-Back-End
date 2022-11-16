@@ -38,7 +38,7 @@ public class DesignService {
 
             if (isExistObject) {
                 amazonS3.deleteObject(bucket, designName);
-                Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.DESIGN_NOT_FOUND));
                 designRepository.delete(design);
             }
         }
@@ -47,7 +47,7 @@ public class DesignService {
     @Transactional
     public DesignResponse save(MultipartFile multipartFile, String designName) throws IOException {
         isExist(designName);
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
@@ -68,11 +68,11 @@ public class DesignService {
     @Transactional
     public void delete(String designName){
         amazonS3.deleteObject(bucket, designName);
-        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.DESIGN_NOT_FOUND));
         if(design.getPost() == null){
             designRepository.delete(design);
         }
         else
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            throw new CustomException(ErrorCode.TEMPLATE_EXIST);
     }
 }

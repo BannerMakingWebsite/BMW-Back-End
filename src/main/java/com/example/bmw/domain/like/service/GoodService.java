@@ -27,8 +27,8 @@ public class GoodService {
 
     @Transactional
     public void insertGood(int postId) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
         Good like = new Good(post, user);
 
         if(isNotAlreadyGood(post, user)){
@@ -37,15 +37,15 @@ public class GoodService {
             postRepository.save(post);
         }
         else{
-            throw new RuntimeException();
+            throw new CustomException(ErrorCode.GOOD_CONFLICT);
         }
     }
 
     @Transactional
     public void deleteGood(int postId) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Good good = goodRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
+        Good good = goodRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.GOOD_NOT_FOUND));
         goodRepository.delete(good);
 
         post.setGoodCount(post.getGoodCount() - 1);

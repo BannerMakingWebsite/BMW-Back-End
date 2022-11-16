@@ -23,7 +23,7 @@ public class UserService {
     @Transactional
     public UserResponse profile(){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         return UserResponse.builder()
                 .id(user.getId())
                 .designs(user.getDesigns())
@@ -41,7 +41,7 @@ public class UserService {
     @Transactional
     public UserResponse profileUpdate(String name, String imageUrl){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         user.profileUpdate(name, imageUrl);
         userRepository.save(user);
         return UserResponse.builder()
@@ -61,7 +61,7 @@ public class UserService {
     @Transactional
     public void deleteUser(DeleteUserRequest request){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             throw new RuntimeException("password was wrong");
 

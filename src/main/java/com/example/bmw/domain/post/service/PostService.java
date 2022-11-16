@@ -29,10 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostService {
-
-    @Value("${spring.cloud.aws.s3.bucket}")
-    private String bucket;
-    private final AmazonS3 amazonS3;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -40,9 +36,9 @@ public class PostService {
 
     @Transactional
     public PostResponse upload(String designName, String title, String name) {
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.DESIGN_NOT_FOUND));
 
         Post post = new Post(title, user, category, design);
         postRepository.save(post);
@@ -61,13 +57,13 @@ public class PostService {
 
     @Transactional
     public void delete(int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
         postRepository.delete(post);
     }
 
     @Transactional
     public PostResponse detail(int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
         return PostResponse.builder()
                 .id(post.getId())
                 .comments(post.getComments())

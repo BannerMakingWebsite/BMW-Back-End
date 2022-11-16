@@ -26,8 +26,8 @@ public class BookmarkService {
 
     @Transactional
     public void addBookmark(int postId){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
 
         Bookmark bookmark = new Bookmark(user, post);
         bookmarkRepository.save(bookmark);
@@ -38,10 +38,10 @@ public class BookmarkService {
 
     @Transactional
     public void deleteBookmark(int postId){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
 
-        Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post).orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
         bookmarkRepository.delete(bookmark);
 
         post.setBookmarkCount(post.getBookmarkCount() - 1);
@@ -50,8 +50,8 @@ public class BookmarkService {
 
     @Transactional
     public List<BookmarkResponse> bookmarkList(){
-        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-        List<Bookmark> bookmarks = bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+        List<Bookmark> bookmarks = bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
         return bookmarks.stream().map(m -> new BookmarkResponse(m.getUser(), m.getPost())).collect(Collectors.toList());
     }
 }

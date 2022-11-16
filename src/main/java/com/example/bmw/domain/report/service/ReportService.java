@@ -23,7 +23,7 @@ public class ReportService {
 
     @Transactional
     public void report(int id){
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.TEMPLATE_NOT_FOUND));
         Report report = new Report(post);
         reportRepository.save(report);
     }
@@ -41,7 +41,7 @@ public class ReportService {
 
     @Transactional
     public ReportResponse detail(int id){
-        Report report = reportRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+        Report report = reportRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.REPORT_NOT_FOUND));
         return ReportResponse.builder()
                 .id(report.getId())
                 .post(report.getPost())
