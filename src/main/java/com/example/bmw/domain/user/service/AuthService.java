@@ -93,8 +93,8 @@ public class AuthService {
         if(!user.isPasswordVerify()){
             throw new CustomException(ErrorCode.UNAUTHORIZED_EMAIL);
         }
-        checkPassword(request.getPassword());
-        user.setPassword(request.getPassword());
+        checkPassword(request.getNewPassword());
+        user.setPassword(request.getNewPassword());
         user.passwordEncode(passwordEncoder);
         user.setPasswordVerify(false);
         userRepository.save(user);
