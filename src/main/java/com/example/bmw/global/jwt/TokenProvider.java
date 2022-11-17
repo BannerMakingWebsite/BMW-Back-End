@@ -47,7 +47,9 @@ public class TokenProvider {
 
     public String createRefreshToken(String email) {
         Date now = new Date();
+        Claims claims = Jwts.claims().setSubject(email);
         String refresh =  Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -74,8 +76,6 @@ public class TokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
             return true;
         } catch (ExpiredJwtException e) {
-            return true;
-        } catch (Exception e) {
             return false;
         }
     }
@@ -83,10 +83,8 @@ public class TokenProvider {
     public boolean validateRefreshToken(String refreshToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken);
-            return claims.getBody().getExpiration().before(new Date());
-        } catch (ExpiredJwtException e) {
             return true;
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) {
             return false;
         }
     }

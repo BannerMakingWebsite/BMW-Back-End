@@ -2,6 +2,8 @@ package com.example.bmw.global.jwt;
 
 import com.example.bmw.domain.user.controller.dto.UserDto;
 import com.example.bmw.domain.user.entity.Authority;
+import com.example.bmw.global.error.exception.CustomException;
+import com.example.bmw.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,19 +32,22 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info(token);
         log.info("토큰을 확인하는중");
         log.info(request.getRequestURI());
-
-        if (token != null && tokenProvider.validateAccessToken(token)) {
-            log.info("정보 입력");
-
-            String email = tokenProvider.getUserEmail(token);
-            UserDto userDto = UserDto.builder()
-                    .email(email)
-                    .name("이름이에용").build();
-
-            Authentication auth = getAuthentication(userDto);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if(Objects.equals(request.getRequestURI(), "/newAccess")){
+            log.info("토큰 재발급");
         }
+        else{
+            if (token != null && tokenProvider.validateAccessToken(token)) {
+                log.info("정보 입력");
 
+                String email = tokenProvider.getUserEmail(token);
+                UserDto userDto = UserDto.builder()
+                        .email(email)
+                        .name("이름이에용").build();
+
+                Authentication auth = getAuthentication(userDto);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
         filterChain.doFilter(request, response);
 
     }

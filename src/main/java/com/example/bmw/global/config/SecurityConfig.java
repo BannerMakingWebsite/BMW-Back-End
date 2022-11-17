@@ -1,9 +1,11 @@
 package com.example.bmw.global.config;
 
+import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.auth.AuthDetailService;
 import com.example.bmw.global.jwt.JwtFilter;
 import com.example.bmw.global.jwt.TokenProvider;
 import com.example.bmw.global.oauth.OAuth2SuccessHandler;
+import com.example.bmw.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +49,7 @@ public class SecurityConfig {
 
                 .authorizeRequests()
                 .antMatchers("/bmw", "/login", "/signup", "/send", "/password",
-                        "/signUpConfirm", "/passwordConfirm", "/passwordReset")
+                        "/signUpConfirm", "/passwordConfirm", "/passwordReset", "/newAccess")
                 .permitAll()
                 .antMatchers("/", "/swagger-ui/**", "/swagger-resources/**", "/v3/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()

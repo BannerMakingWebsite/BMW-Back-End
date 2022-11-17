@@ -148,7 +148,7 @@ public class AuthService {
         String accessToken = tokenProvider.resolveAccessToken(request);
         String refreshToken = tokenProvider.resolveRefreshToken(request);
 
-        if(tokenProvider.validateAccessToken(accessToken)) {
+        if(!tokenProvider.validateAccessToken(accessToken)) {
             log.info("access 토큰 만료됨");
             if(tokenProvider.validateRefreshToken(refreshToken)) {
                 log.info("refresh Token 은 유효합니다.");
