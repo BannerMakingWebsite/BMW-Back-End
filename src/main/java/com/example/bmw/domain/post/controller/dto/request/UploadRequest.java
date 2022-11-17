@@ -5,11 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UploadRequest {
+    @NotEmpty(message = "제목은 필수입력란 입니다.")
     private String title;
-    private String name;
+    @NotEmpty(message = "카테고리 이름은 필수 입력란 입니다.")
+    private String CategoryName;
+    @NotEmpty(message = "디자인 이름은 필수 입력란 입니다.")
     private String designName;
 }

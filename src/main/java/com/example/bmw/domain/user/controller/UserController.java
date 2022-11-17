@@ -8,6 +8,8 @@ import com.example.bmw.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -20,12 +22,12 @@ public class UserController {
     }
 
     @PatchMapping("/mypage")
-    public UserResponse profileUpdate(@RequestBody ProfileUpdateRequest request){
+    public UserResponse profileUpdate(@RequestBody @Valid ProfileUpdateRequest request){
         return userService.profileUpdate(request.getName(), request.getImageUrl());
     }
 
     @DeleteMapping("/mypage")
-    public void deleteUser(@RequestBody DeleteUserRequest request){
+    public void deleteUser(@RequestBody @Valid DeleteUserRequest request){
         userService.deleteUser(request);
     }
 }

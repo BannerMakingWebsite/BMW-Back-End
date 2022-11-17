@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,12 +17,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public UserResponse signup(@RequestBody SignupRequest request){
+    public UserResponse signup(@RequestBody @Valid SignupRequest request){
         return authService.signup(request);
     }
 
     @PostMapping("/bmw")
-    public TokenResponse login(@RequestBody LoginRequest request){
+    public TokenResponse login(@RequestBody @Valid LoginRequest request){
         return authService.login(request);
     }
 
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/send")
-    public void send(@RequestBody EmailRequest request){
+    public void send(@RequestBody @Valid EmailRequest request){
         authService.send(request.getEmail());
     }
 
@@ -46,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/passwordReset")
-    public void passwordReset(@RequestBody PasswordRequest request){
+    public void passwordReset(@RequestBody @Valid PasswordRequest request){
         authService.changePassword(request);
     }
 }

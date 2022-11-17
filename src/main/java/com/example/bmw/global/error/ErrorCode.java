@@ -16,7 +16,7 @@ public enum ErrorCode {
 
     //401
     REFRESH_TOKEN_NOT_FOUND(401, "토큰을 찾을 수 없음"),
-    UNAUTHORIZED_EMAIL(401, "이메일 인증이 되지 않았습니다."),
+    UNAUTHORIZED_EMAIL(401, "이미 회원가입이 되었거나 이메일 인증이 되지 않았습니다."),
     PASSWORD_NOT_MATCH(401, "패스워드가 다릅니다."),
     CODE_NOT_MATCH(401, "인증코드가 다릅니다."),
 
