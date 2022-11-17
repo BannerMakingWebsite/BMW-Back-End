@@ -14,7 +14,7 @@ public class UploadRequest {
     @NotEmpty(message = "제목은 필수입력란 입니다.")
     private String title;
     @NotEmpty(message = "카테고리 이름은 필수 입력란 입니다.")
-    private String CategoryName;
+    private String categoryName;
     @NotEmpty(message = "디자인 이름은 필수 입력란 입니다.")
     private String designName;
 }
