@@ -56,7 +56,7 @@ public class User{
     @Column
     private String name;
 
-    @Column
+    @Column(length = 100000000)
     private String imageUrl;
 
     @Column
