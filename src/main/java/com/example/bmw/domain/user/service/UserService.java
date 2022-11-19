@@ -26,7 +26,6 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         return UserResponse.builder()
                 .id(user.getId())
-                .designs(user.getDesigns())
                 .goods(user.getGoods())
                 .bookmarks(user.getBookmarks())
                 .comments(user.getComments())
@@ -46,7 +45,6 @@ public class UserService {
         userRepository.save(user);
         return UserResponse.builder()
                 .id(user.getId())
-                .designs(user.getDesigns())
                 .goods(user.getGoods())
                 .bookmarks(user.getBookmarks())
                 .comments(user.getComments())

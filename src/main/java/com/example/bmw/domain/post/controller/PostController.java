@@ -16,8 +16,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/template")
-    public PostResponse upload(@RequestBody @Valid UploadRequest upload) {
-        return postService.upload(upload.getDesignName(), upload.getTitle(), upload.getCategoryName());
+    public void upload(@RequestBody @Valid UploadRequest upload) {
+        postService.upload(upload.getDesign(), upload.getTitle(), upload.getCategoryName(), upload.getPreview());
     }
 
     @DeleteMapping("/template/{postId}")

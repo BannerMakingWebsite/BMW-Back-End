@@ -1,11 +1,7 @@
 package com.example.bmw.domain.post.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.repository.CategoryRepository;
-import com.example.bmw.domain.design.entity.Design;
-import com.example.bmw.domain.design.repository.DesignRepository;
 import com.example.bmw.domain.post.controller.dto.response.PostResponse;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
@@ -15,15 +11,11 @@ import com.example.bmw.global.error.ErrorCode;
 import com.example.bmw.global.error.exception.CustomException;
 import com.example.bmw.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,27 +24,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final DesignRepository designRepository;
 
     @Transactional
-    public PostResponse upload(String designName, String title, String name) {
+    public void upload(String design, String title, String name, String preview) {
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         Category category = categoryRepository.findByName(name).orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
-        Design design = designRepository.findByDesignName(designName).orElseThrow(() -> new CustomException(ErrorCode.DESIGN_NOT_FOUND));
 
-        Post post = new Post(title, user, category, design);
+        Post post = new Post(title, user, category, design, preview);
         postRepository.save(post);
-        return PostResponse.builder()
-                .id(post.getId())
-                .comments(post.getComments())
-                .user(post.getUser())
-                .category(post.getCategory())
-                .design(post.getDesign())
-                .title(post.getTitle())
-                .goodCount(post.getGoodCount())
-                .bookmarkCount(post.getBookmarkCount())
-                .createTime(post.getCreateTime())
-                .build();
     }
 
     @Transactional
@@ -74,6 +53,7 @@ public class PostService {
                 .goodCount(post.getGoodCount())
                 .bookmarkCount(post.getBookmarkCount())
                 .createTime(post.getCreateTime())
+                .preview(post.getPreview())
                 .build();
     }
 
@@ -89,7 +69,8 @@ public class PostService {
                 p.getTitle(),
                 p.getGoodCount(),
                 p.getBookmarkCount(),
-                p.getCreateTime())).collect(Collectors.toList());
+                p.getCreateTime(),
+                p.getPreview())).collect(Collectors.toList());
     }
 
     @Transactional
@@ -104,7 +85,8 @@ public class PostService {
                 p.getTitle(),
                 p.getGoodCount(),
                 p.getBookmarkCount(),
-                p.getCreateTime())).collect(Collectors.toList());
+                p.getCreateTime(),
+                p.getPreview())).collect(Collectors.toList());
     }
 
     @Transactional
@@ -119,6 +101,7 @@ public class PostService {
                 p.getTitle(),
                 p.getGoodCount(),
                 p.getBookmarkCount(),
-                p.getCreateTime())).collect(Collectors.toList());
+                p.getCreateTime(),
+                p.getPreview())).collect(Collectors.toList());
     }
 }

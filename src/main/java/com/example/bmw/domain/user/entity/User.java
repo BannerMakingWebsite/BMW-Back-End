@@ -2,7 +2,6 @@ package com.example.bmw.domain.user.entity;
 
 import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.comment.entity.Comment;
-import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,10 +28,6 @@ public class User{
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Design> designs;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Good> goods;
 
     @JsonIgnore
@@ -56,7 +51,7 @@ public class User{
     @Column
     private String name;
 
-    @Column(length = 100000000)
+    @Column(length = 999999999)
     private String imageUrl;
 
     @Column

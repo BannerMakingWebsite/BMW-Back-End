@@ -3,7 +3,6 @@ package com.example.bmw.domain.post.entity;
 import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.comment.entity.Comment;
-import com.example.bmw.domain.design.entity.Design;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.user.entity.User;
@@ -54,10 +53,11 @@ public class Post {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "design_id")
-    private Design design;
+    @Column(length = 999999999)
+    private String design;
+
+    @Column(length = 999999999)
+    private String preview;
 
     @Column
     private String title;
@@ -71,8 +71,9 @@ public class Post {
     @Column
     private LocalDateTime createTime;
 
-    public Post(String title, User user, Category category, Design design){
+    public Post(String title, User user, Category category, String design, String preview){
         this.user = user;
+        this.preview = preview;
         this.goodCount = 0;
         this.bookmarkCount = 0;
         this.createTime = LocalDateTime.now();

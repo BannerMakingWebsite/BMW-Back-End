@@ -114,7 +114,6 @@ public class AuthService {
         userRepository.save(user);
         return UserResponse.builder()
                 .id(user.getId())
-                .designs(user.getDesigns())
                 .goods(user.getGoods())
                 .bookmarks(user.getBookmarks())
                 .comments(user.getComments())
