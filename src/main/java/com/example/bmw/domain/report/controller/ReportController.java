@@ -1,7 +1,6 @@
 package com.example.bmw.domain.report.controller;
 
 import com.example.bmw.domain.report.controller.dto.response.ReportResponse;
-import com.example.bmw.domain.report.entity.Report;
 import com.example.bmw.domain.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

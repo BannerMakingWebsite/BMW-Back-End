@@ -2,7 +2,6 @@ package com.example.bmw.domain.category.controller;
 
 import com.example.bmw.domain.category.controller.dto.request.CategoryRequest;
 import com.example.bmw.domain.category.controller.dto.response.CategoryResponse;
-import com.example.bmw.domain.category.entity.Category;
 import com.example.bmw.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

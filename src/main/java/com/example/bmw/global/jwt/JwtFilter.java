@@ -2,8 +2,6 @@ package com.example.bmw.global.jwt;
 
 import com.example.bmw.domain.user.controller.dto.UserDto;
 import com.example.bmw.domain.user.entity.Authority;
-import com.example.bmw.global.error.exception.CustomException;
-import com.example.bmw.global.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

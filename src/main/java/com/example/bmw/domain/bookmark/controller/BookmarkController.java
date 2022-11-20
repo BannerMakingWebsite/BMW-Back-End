@@ -1,7 +1,6 @@
 package com.example.bmw.domain.bookmark.controller;
 
 import com.example.bmw.domain.bookmark.controller.dto.response.BookmarkResponse;
-import com.example.bmw.domain.bookmark.entity.Bookmark;
 import com.example.bmw.domain.bookmark.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

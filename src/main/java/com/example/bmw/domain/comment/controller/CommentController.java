@@ -1,7 +1,6 @@
 package com.example.bmw.domain.comment.controller;
 
 import com.example.bmw.domain.comment.controller.dto.request.CommentRequest;
-import com.example.bmw.domain.comment.entity.Comment;
 import com.example.bmw.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

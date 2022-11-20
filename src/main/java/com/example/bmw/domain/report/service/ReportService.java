@@ -1,6 +1,5 @@
 package com.example.bmw.domain.report.service;
 
-import com.example.bmw.domain.post.controller.dto.response.PostResponse;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.post.repository.PostRepository;
 import com.example.bmw.domain.report.controller.dto.response.ReportResponse;
