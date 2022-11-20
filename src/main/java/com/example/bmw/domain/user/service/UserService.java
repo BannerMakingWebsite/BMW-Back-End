@@ -61,7 +61,7 @@ public class UserService {
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-            throw new RuntimeException("password was wrong");
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
 
         userRepository.deleteById(user.getId());
     }
