@@ -47,7 +47,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private String makeRedirectUrl(String accessToken, String refreshToken){
-        return UriComponentsBuilder.fromUriString("http://localhost:8080/oauth2/redirect/" + "accessToken=" + accessToken + "&" + "refreshToken=" + refreshToken)
+        return UriComponentsBuilder.fromUriString("http://ec2-3-37-129-114.ap-northeast-2.compute.amazonaws.com/oauth2/redirect/" + "accessToken=" + accessToken + "&" + "refreshToken=" + refreshToken)
                 .build().toUriString();
 
     }

@@ -33,6 +33,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if(Objects.equals(request.getRequestURI(), "/newAccess")){
             log.info("토큰 재발급");
         }
+        else if(Objects.equals(request.getRequestURI(), "/google")){
+            log.info("구글 로그인");
+        }
         else{
             if (token != null && tokenProvider.validateAccessToken(token)) {
                 log.info("정보 입력");

@@ -75,11 +75,6 @@ public class User{
         this.password = password;
     }
 
-    public void oauthUpdate(String name, String imageUrl){
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
-
     public void signup(String password, String name) {
         this.password = password;
         this.name = name;

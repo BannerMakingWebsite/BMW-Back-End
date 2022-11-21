@@ -55,7 +55,7 @@ public class AuthDetailService extends DefaultOAuth2UserService implements UserD
                     .build());
         }else{
             User user = userRepository.findByEmail(oAuth2User.getAttribute("email")).orElseThrow(()-> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
-            user.oauthUpdate(oAuth2User.getAttribute("name"), oAuth2User.getAttribute("picture"));
+            user.profileUpdate(oAuth2User.getAttribute("name"), oAuth2User.getAttribute("picture"));
             userRepository.save(user);
         }
 

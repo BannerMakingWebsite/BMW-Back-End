@@ -47,7 +47,7 @@ public class SecurityConfig {
 
                 .authorizeRequests()
                 .antMatchers("/bmw", "/login", "/signup", "/send", "/password",
-                        "/signUpConfirm", "/passwordConfirm", "/passwordReset", "/newAccess")
+                        "/signUpConfirm", "/passwordConfirm", "/passwordReset", "/newAccess", "/google")
                 .permitAll()
                 .antMatchers("/", "/swagger-ui/**", "/swagger-resources/**", "/v3/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()

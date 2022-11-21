@@ -1,5 +1,6 @@
 package com.example.bmw.domain.user.service;
 
+import com.example.bmw.domain.user.controller.dto.UserDto;
 import com.example.bmw.domain.user.controller.dto.request.LoginRequest;
 import com.example.bmw.domain.user.controller.dto.request.PasswordRequest;
 import com.example.bmw.domain.user.controller.dto.request.SignupRequest;
@@ -143,6 +144,28 @@ public class AuthService {
     }
 
     @Transactional
+    public TokenResponse google(UserDto userDto){
+        if(userRepository.existsByEmail(userDto.getEmail())){
+            User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
+            user.profileUpdate(userDto.getName(), userDto.getPicture());
+        }
+        else{
+            userRepository.save(User.builder()
+                    .email(userDto.getEmail())
+                    .name(userDto.getName())
+                    .imageUrl(userDto.getPicture())
+                    .authority(Authority.USER)
+                    .build());
+        }
+        String accessToken = tokenProvider.createAccessToken(userDto.getEmail(), Authority.USER);
+        String refreshToken = tokenProvider.createRefreshToken(userDto.getEmail());
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Transactional
     public TokenResponse issueAccessToken(HttpServletRequest request){
         String accessToken = tokenProvider.resolveAccessToken(request);
         String refreshToken = tokenProvider.resolveRefreshToken(request);
@@ -161,6 +184,7 @@ public class AuthService {
             }
             else {
                 log.info("Refresh Token 이 유효하지 않습니다.");
+                throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
             }
         }
         return TokenResponse.builder()

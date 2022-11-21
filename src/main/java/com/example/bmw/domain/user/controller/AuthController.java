@@ -1,5 +1,6 @@
 package com.example.bmw.domain.user.controller;
 
+import com.example.bmw.domain.user.controller.dto.UserDto;
 import com.example.bmw.domain.user.controller.dto.request.*;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
 import com.example.bmw.domain.user.controller.dto.response.UserResponse;
@@ -18,6 +19,11 @@ public class AuthController {
     @PostMapping("/signup")
     public UserResponse signup(@RequestBody @Valid SignupRequest request){
         return authService.signup(request);
+    }
+
+    @PostMapping("/google")
+    public TokenResponse google(@RequestBody UserDto userDto){
+        return authService.google(userDto);
     }
 
     @PostMapping("/bmw")

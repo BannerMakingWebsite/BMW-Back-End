@@ -1,5 +1,6 @@
 package com.example.bmw.global.jwt;
 
+import com.example.bmw.domain.user.controller.dto.UserDto;
 import com.example.bmw.domain.user.entity.Authority;
 import com.example.bmw.global.redis.RedisDao;
 import io.jsonwebtoken.*;
@@ -56,7 +57,6 @@ public class TokenProvider {
                 .compact();
         redisDao.setValues(email, refresh, Duration.ofMillis(REFRESH_TOKEN_VALID_TIME));
         return refresh;
-
     }
 
     public String getUserEmail(String token) {
