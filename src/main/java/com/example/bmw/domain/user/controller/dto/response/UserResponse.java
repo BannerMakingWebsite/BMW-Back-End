@@ -5,6 +5,7 @@ import com.example.bmw.domain.comment.entity.Comment;
 import com.example.bmw.domain.like.entity.Good;
 import com.example.bmw.domain.post.entity.Post;
 import com.example.bmw.domain.user.entity.Authority;
+import com.example.bmw.domain.user.entity.LoginType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,5 @@ public class UserResponse {
     private String name;
     private String imageUrl;
     private Authority authority;
+    private LoginType loginType;
 }

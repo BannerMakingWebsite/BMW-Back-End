@@ -58,6 +58,10 @@ public class User{
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
     private boolean isVerify;
     private boolean passwordVerify;
 
@@ -79,6 +83,7 @@ public class User{
         this.password = password;
         this.name = name;
         this.authority = Authority.USER;
+        this.loginType = LoginType.BMW;
         this.isVerify = false;
     }
 

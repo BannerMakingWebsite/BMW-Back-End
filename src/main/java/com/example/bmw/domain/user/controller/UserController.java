@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @DeleteMapping("/mypage")
-    public void deleteUser(@RequestBody @Valid DeleteUserRequest request){
+    public void deleteUser(@RequestBody DeleteUserRequest request){
         userService.deleteUser(request);
     }
 }

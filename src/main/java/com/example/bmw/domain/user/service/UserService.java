@@ -2,6 +2,7 @@ package com.example.bmw.domain.user.service;
 
 import com.example.bmw.domain.user.controller.dto.request.DeleteUserRequest;
 import com.example.bmw.domain.user.controller.dto.response.UserResponse;
+import com.example.bmw.domain.user.entity.LoginType;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.error.ErrorCode;
@@ -34,6 +35,7 @@ public class UserService {
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
                 .authority(user.getAuthority())
+                .loginType(user.getLoginType())
                 .build();
     }
 
@@ -53,6 +55,7 @@ public class UserService {
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
                 .authority(user.getAuthority())
+                .loginType(user.getLoginType())
                 .build();
     }
 
@@ -60,9 +63,11 @@ public class UserService {
     public void deleteUser(DeleteUserRequest request){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
-        if(!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
 
+        if(user.getLoginType() == LoginType.BMW){
+            if(!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+                throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
         userRepository.deleteById(user.getId());
     }
 }

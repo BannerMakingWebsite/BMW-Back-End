@@ -7,6 +7,7 @@ import com.example.bmw.domain.user.controller.dto.request.SignupRequest;
 import com.example.bmw.domain.user.controller.dto.response.TokenResponse;
 import com.example.bmw.domain.user.controller.dto.response.UserResponse;
 import com.example.bmw.domain.user.entity.Authority;
+import com.example.bmw.domain.user.entity.LoginType;
 import com.example.bmw.domain.user.entity.User;
 import com.example.bmw.domain.user.repository.UserRepository;
 import com.example.bmw.global.error.ErrorCode;
@@ -123,6 +124,7 @@ public class AuthService {
                 .name(user.getName())
                 .imageUrl(user.getImageUrl())
                 .authority(user.getAuthority())
+                .loginType(user.getLoginType())
                 .build();
     }
 
@@ -155,6 +157,7 @@ public class AuthService {
                     .name(userDto.getName())
                     .imageUrl(userDto.getPicture())
                     .authority(Authority.USER)
+                    .loginType(LoginType.GOOGLE)
                     .build());
         }
         String accessToken = tokenProvider.createAccessToken(userDto.getEmail(), Authority.USER);
