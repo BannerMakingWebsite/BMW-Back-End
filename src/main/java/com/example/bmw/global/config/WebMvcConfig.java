@@ -16,7 +16,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .exposedHeaders("*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(MAX_AGE_SECS);
     }
 }
