@@ -52,6 +52,17 @@ public class BookmarkService {
     public List<BookmarkResponse> bookmarkList(){
         User user = userRepository.findByEmail(SecurityUtil.getLoginUserEmail()).orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
         List<Bookmark> bookmarks = bookmarkRepository.findByUser(user).orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
-        return bookmarks.stream().map(m -> new BookmarkResponse(m.getUser(), m.getPost())).collect(Collectors.toList());
+        return bookmarks.stream().map(m -> new BookmarkResponse(
+                m.getPost().getId(),
+                m.getPost().getComments(),
+                m.getUser(),
+                m.getPost().getCategory(),
+                m.getPost().getDesign(),
+                m.getPost().getTitle(),
+                m.getPost().getGoodCount(),
+                m.getPost().getBookmarkCount(),
+                m.getPost().getCreateTime(),
+                m.getPost().getPreview()
+                )).collect(Collectors.toList());
     }
 }
